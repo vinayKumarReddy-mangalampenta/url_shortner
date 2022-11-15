@@ -1,6 +1,6 @@
 
 from django.shortcuts import redirect, render
-
+from django.http import HttpResponseRedirect
 from shortner.models import ShortUrl
 from shortner.forms import CreateUrlForm
 # Create your views here.
@@ -29,6 +29,9 @@ def redirector(request, pk):
     try:
         data = ShortUrl.objects.get(short_url=pk)
         print("data", data)
-        return redirect(data.link)
+        if not data.link.startswith("http") :
+            link ="https://" + data.link
+            return redirect(link)
+        return HttpResponseRedirect(data.link)
     except:
         return redirect('shortner')

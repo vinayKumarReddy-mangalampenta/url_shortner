@@ -54,6 +54,19 @@
             cursor: pointer;
             border: none;
         }
+
+        .copy-btn {
+            padding: 20px;
+            align-self: flex-end;
+            width: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgb(29, 228, 18);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+        }
     </style>
 </head>
 
@@ -61,13 +74,34 @@
     <div class="container">
         <h1>Url Shortner </h1>
         {% if url %}
-        <a href="/{{url}}" target="_blank" >here is your short url</a>
+        <input value="https://urlshortner.up.railway.app/{{url}}" type="hidden" id="shortUrl" target="_blank"></input>
+        <a href="/{{url}}" target="_blank">https://urlshortner.up.railway.app/{{url}}</a>
         {% endif %}
         <form class="form" action="" method="POST">
             {% csrf_token %}
             {{form.as_p}}
             <button type="submit" class="btn">submit</button>
+            {% if url %}
+            <button onclick="CopyText()" class="copy-btn" type="button">Copy url</button>
+            {% endif %}
         </form>
+
+
+        <script type="text/javascript">
+
+            function CopyText() {
+                console.log("called")
+                var text = document.getElementById('shortUrl')
+                text.select();
+                console.log(text)
+                document.execCommand('copy')
+                alert("text copied")
+            }
+
+            CopyText()
+
+
+        </script>
     </div>
 </body>
 
