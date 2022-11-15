@@ -1,0 +1,74 @@
+<html>
+
+<head>
+    <title>URl Shortner</title>
+    <style>
+        .container {
+            display: flex;
+            background-color: #0fb3b3;
+            height: 100%;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        .form {
+            display: flex;
+            padding: 30px;
+            width: 40%;
+            min-width: 200px;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 30px;
+        }
+
+        .input {
+            height: 45px;
+            line-height: 40px;
+            font-size: 23px;
+            color: rgb(1, 9, 7);
+            width: 85%;
+            border: 2px solid gainsboro;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .btn {
+            align-self: center;
+            width: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: coral;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Url Shortner </h1>
+        {% if url %}
+        <a href="/{{url}}" target="_blank" >here is your short url</a>
+        {% endif %}
+        <form class="form" action="" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="btn">submit</button>
+        </form>
+    </div>
+</body>
+
+</html>
