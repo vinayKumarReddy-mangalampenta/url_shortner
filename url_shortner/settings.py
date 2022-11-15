@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://urlshortner.up.railway.app/','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://urlshortner.up.railway.app/','https://*.127.0.0.1','https://*.railway.app','*']
 
 # Application definition
 
