@@ -1,9 +1,9 @@
 
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from shortner.models import ShortUrl
 from shortner.forms import CreateUrlForm
-# Create your views here.
+from django.contrib import messages
 
 import string
 import secrets
@@ -12,7 +12,6 @@ import secrets
 def shortner(request):
 
     form = CreateUrlForm()
-    url = None
     if request.method == "POST":
         data = CreateUrlForm(request.POST)
         if data.is_valid():
@@ -20,9 +19,10 @@ def shortner(request):
                           string.digits+"-"+"_") for x in range(7))
             res = ShortUrl.objects.create(
                 short_url=url, link=request.POST.get('link'))
-            res.save()
+            res.save() 
+            messages.success(request, url)
 
-    return render(request, "main.html", {'form': form, 'url': url})
+    return render(request, "main.html", {'form': form})
 
 
 def redirector(request, pk):
@@ -34,4 +34,4 @@ def redirector(request, pk):
             return redirect(link)
         return HttpResponseRedirect(data.link)
     except:
-        return redirect('shortner')
+        return HttpResponse("Url Broken")

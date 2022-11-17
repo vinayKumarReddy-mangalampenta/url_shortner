@@ -17,6 +17,13 @@
             margin: 0;
         }
 
+        h1 {
+            text-decoration: underline;
+            /* -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.4)); */
+            text-underline-offset: 10px;
+            text-decoration-color: #023825;
+        }
+
         .form {
             display: flex;
             padding: 30px;
@@ -56,16 +63,47 @@
         }
 
         .copy-btn {
-            padding: 20px;
-            align-self: flex-end;
-            width: 100px;
-            padding: 10px;
+            /* padding: 20px; */
+            /* align-self: flex-end; */
+            /* width: 20px; */
+
             border-radius: 10px;
-            background-color: rgb(29, 228, 18);
-            color: white;
-            font-size: 20px;
+            background: #edf2fe;
+            color: #2a5bd7;
+            width: 100px;
+            height: 30px;
+            font-size: 18px;
+            padding: 3px;
             cursor: pointer;
             border: none;
+            flex: 1 !important;
+           margin-top: 5px;
+            margin-left: 5px;
+        }
+
+        .logo {
+            height: 70px;
+        }
+
+        .short-url {
+            margin-top: 10px;
+            /* border: 1px solid red; */
+            outline: none;
+            cursor: pointer;
+            font-size: 15px;
+            border: 1px solid black;
+            border-radius: 12px;
+            padding: 2px 4px;
+        }
+
+        .copy-con {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .copy-con>input {
+            flex: 3;
         }
     </style>
 </head>
@@ -73,33 +111,57 @@
 <body>
     <div class="container">
         <h1>Url Shortner </h1>
-        {% if url %}
-        <input value="https://urlshortner.up.railway.app/{{url}}" type="hidden" id="shortUrl" target="_blank"></input>
-        <a href="/{{url}}" target="_blank">https://urlshortner.up.railway.app/{{url}}</a>
-        {% endif %}
+
+        <img src="https://raw.githubusercontent.com/wsvincent/awesome-django/4ff2b6fcc44e2e657ad0fe93ec7c8bed97381139/assets/django-logo.svg"
+            class="logo" />
+
+
         <form class="form" action="" method="POST">
             {% csrf_token %}
             {{form.as_p}}
-            <button type="submit" class="btn">submit</button>
-            {% if url %}
-            <button onclick="CopyText()" class="copy-btn" type="button">Copy url</button>
+            <button type="submit" class="btn">short it</button>
+            {% if messages %}
+            {% for message in messages %}
+            <div class="copy-con">
+                <a style="margin:auto;margin-top:10px;" href="{{ request.META.HTTP_REFERER }}{{message}}"
+                target="_blank">{{request.META.HTTP_REFERER }}{{message}}</a>
+                <input type="button" value="copy" onclick="copy('{{request.META.HTTP_REFERER }}{{message}}')"
+                    class="copy-btn" />
+            </div>
+
+            
+
+            {% endfor %}
             {% endif %}
         </form>
 
 
         <script type="text/javascript">
+              
+            function copy(url) {
+                if (!navigator.clipboard) {
+                    alert("system denied to auto copy")
+                    return;
+                }
+                navigator.clipboard.writeText(url).then(function () {
+                    const ele = document.getElementsByClassName('copy-btn')[0]
+                    ele.style.backgroundColor = 'green'
+                    ele.style.color = 'white'
+                    ele.value = "copied"
 
-            function CopyText() {
-                console.log("called")
-                var text = document.getElementById('shortUrl')
-                text.select();
-                console.log(text)
-                document.execCommand('copy')
-                alert("text copied")
+                    let timerID = setTimeout(() => {
+                        ele.style.backgroundColor = '#edf2fe'
+                        ele.style.color = '#2a5bd7'
+                        ele.value = "copy"
+
+                     
+            
+                    }, 2000)
+                }, function (err) {
+                    console.error('Async: Could not copy text: ', err);
+                });
+
             }
-
-            CopyText()
-
 
         </script>
     </div>
